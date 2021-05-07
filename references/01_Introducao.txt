@@ -1,0 +1,17 @@
+
+====================================================================================================
+Hibernate - Introdução
+====================================================================================================
+
+Introdução
+----------------------------------------------------------------------------------------------------
+Hibernate é um framework para mapeamento objeto-relacional para aplicações Java. Ele é uma 
+implementação da especificação JPA (Java Persistence API), onde esta definido todo o critério para
+mapeamento objeto-relacional.
+
+
+Mapeamento objeto-relacional
+----------------------------------------------------------------------------------------------------
+O mapeamento objeto-relacional é o processo onde tabelas de um determinado banco de dados relacional
+são mapeadas através de classes Java. O mapeamento visa facilitar e agilizar o acesso aos dados
+armazenados em bancos de dados relacionais. 

@@ -1,0 +1,55 @@
+
+====================================================================================================
+Hibernate - Instalação
+====================================================================================================
+
+Introdução
+----------------------------------------------------------------------------------------------------
+Para instalar o Hibernate é necessário criar um projeto Java e adicionar as bibliotecas (arquivos)
+do Hibernate no projeto. 
+
+As bibliotecas podem ser adicionadas manualmente ou através do Apache Maven. A instalação manual
+requer baixar os arquivos do Hibernate, descompactá-los e adicionar as bibliotecas (.jar) no
+classpath do projeto.
+
+Neste curso será utilizado o Apache Maven para instalação do Hibernate.
+
+
+Hibernate vs Banco de dados
+----------------------------------------------------------------------------------------------------
+Para que o Hibernate possa acessar um determinado banco de dados é necessário adicionar ao projeto
+um conector para banco de dados. O conectar fará a ponte entre o Hibernate e o banco de dados.
+
+No arquivo 'pom.xml' inserir as linhas abaixo para adicionar o conector para o banco de dados MySQL.
+
+...
+<!-- Database -->
+<dependency>
+  <groupId>mysql</groupId>
+  <artifactId>mysql-connector-java</artifactId>
+  <version>8.0.21</version>  <!-- 8.0.21 => jul/2020 -->
+  <scope>compile</scope>
+</dependency>
+...    
+
+
+Instalando Hibernate
+----------------------------------------------------------------------------------------------------
+No arquivo 'pom.xml' inserir as linhas abaixo para adicionar as bibliotecas do Hibernate ao projeto.
+
+...
+<!-- Hibernate -->
+<dependency>
+  <groupId>org.hibernate</groupId>
+  <artifactId>hibernate-core</artifactId>
+  <version>5.4.19.Final</version>  <!-- 5.4.19 => jul/2020 -->
+  <scope>compile</scope>
+</dependency>
+<dependency>
+  <groupId>org.hibernate</groupId>
+  <artifactId>hibernate-c3p0</artifactId>
+  <version>5.4.19.Final</version>  <!-- 5.4.19 => jul/2020 -->
+  <scope>compile</scope>
+ </dependency>
+...    
+

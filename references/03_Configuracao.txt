@@ -1,0 +1,211 @@
+
+====================================================================================================
+Hibernate - Configuração
+====================================================================================================
+
+Introdução
+----------------------------------------------------------------------------------------------------
+O Hibernate pode ser configurado por meio de arquivo de propriedades, arquivo XML ou 
+programaticamente. O arquivo de propriedades é o local padrão para armazenar as configurações, o
+arquivo XML é utilizado para sobrescrever alguma propriedade que esta no arquivo de propriedades e 
+a configuração programática é utilizada para sobrescrever o arquivo XML.
+
+
+Arquivo de propriedades
+----------------------------------------------------------------------------------------------------
+O arquivo de propriedade deve ter o nome 'hibernate.properties' e deve estar na pasta src (para um
+projeto não Maven) ou na pasta src/main/resources (para um projeto Maven).
+
+
+hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+
+hibernate.connection.driver_class=com.mysql.cj.jdbc.Driver
+hibernate.connection.url=jdbc:mysql://localhost:3306/nome-banco-de-dados
+hibernate.connection.username=usuário-do-banco
+hibernate.connection.password=senha-usuário-do-banco
+
+hibernate.show_sql=false 
+
+hibernate.c3p0.min_size=5 
+hibernate.c3p0.max_size=20 
+hibernate.c3p0.timeout=3000 
+hibernate.c3p0.max_statements=30
+
+
+Inicialização do Hibernate
+----------------------------------------------------------------------------------------------------
+O Hibernate precisa ser inicializado pelo projeto para que o acesso ao banco de dados esteja
+disponível. O processo de inicialização normalmente é feito por uma classe Java chamada
+HibernateUtils.
+
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+public class HibernateUtils {
+
+  private static SessionFactory sessionFactory = null;
+
+  private HibernateUtils() {}
+
+  public static SessionFactory getSessionFactory() {
+    if (sessionFactory == null) {
+      StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
+
+      registryBuilder.loadProperties("hibernate.properties");
+
+      StandardServiceRegistry registry = registryBuilder.build();
+
+      try {
+        MetadataSources metadataSources = new MetadataSources(registry);
+
+        sessionFactory = metadataSources.buildMetadata().buildSessionFactory();
+      } catch (Exception e) {
+        e.printStackTrace();
+        StandardServiceRegistryBuilder.destroy(registry);
+      }
+    }
+    return sessionFactory;
+  }
+
+  public static void shutdown() { 
+    if (sessionFactory != null) {
+      sessionFactory.close();
+    }  
+  }
+
+}
+
+
+Testando a inicialização do Hibernate
+----------------------------------------------------------------------------------------------------
+Para verificar se o Hibernate foi configurado corretamente e a inicialização esta correta, pode-se
+utilizar a classe abaixo.
+
+
+import org.hibernate.Session;
+
+public class HibernateUtilsTest {
+
+  public static void main(String[] args) {
+    Session session = null;
+    try {
+      session = HibernateUtils.getSessionFactory().openSession();
+      System.out.println("Hibernate OK");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    if (session != null) {
+      session.close();
+    }
+    HibernateUtils.shutdown();
+  }
+
+}
+
+
+Arquivo XML
+----------------------------------------------------------------------------------------------------
+A configuração por arquivo XML deve ser utilizada para sobrescrever alguma ou algumas configurações
+definidas no arquivo de propriedades hibernate.properties. O nome no arquivo XML deve ser 
+hibernate.cfg.xml e deve estar na pasta src (para um projeto não Maven) ou na pasta src/main/resources
+(para um projeto Maven).
+
+
+<?xml version="1.0" encoding="utf-8"?> 
+<!DOCTYPE hibernate-configuration PUBLIC 
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN" 
+          "http://www.hibernate.org/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.c3p0.min_size">10</property>
+    <property name="hibernate.c3p0.max_size">50</property> 
+   </session-factory>
+</hibernate-configuration>
+
+
+Para que o arquivo hibernate.cfg.xml seja lido pelo Hibernate é necessário alterar a classe 
+HibernateUtils como mostra o exemplo abaixo.
+
+
+public class HibernateUtils { 
+
+  private static SessionFactory sessionFactory = null; 
+
+  private HibernateUtils() {} 
+
+  public static SessionFactory getSessionFactory() { 
+    if (sessionFactory == null) { 
+      StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder(); 
+	
+      registryBuilder.loadProperties("hibernate.properties"); 
+
+===>  registryBuilder.configure("hibernate.cfg.xml");  <===
+
+      StandardServiceRegistry registry = registryBuilder.build(); 
+
+      try { 
+        MetadataSources metadataSources = new MetadataSources(registry); 
+
+        sessionFactory = metadataSources.buildMetadata().buildSessionFactory(); 
+      } catch (Exception e) {
+        e.printStackTrace(); 
+        StandardServiceRegistryBuilder.destroy(registry); 
+      } 
+    } 
+    return sessionFactory; 
+  } 
+
+  public static void shutdown() { 
+    if (sessionFactory != null) {
+      sessionFactory.close();
+    }  
+  }
+  
+}
+
+
+Configuração programática
+----------------------------------------------------------------------------------------------------
+A configuração programática deve ser utilizada para sobrescrever alguma ou algumas configurações 
+contidas no arquivo XML.
+
+
+public class HibernateUtils {
+
+  private static SessionFactory sessionFactory = null; 
+
+  private HibernateUtils() { }
+
+  public static SessionFactory getSessionFactory() { 
+    if (sessionFactory == null) { 
+      StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder(); 
+
+      registryBuilder.loadProperties("hibernate.properties"); 
+
+      registryBuilder.configure("hibernate.cfg.xml"); 
+
+===>  registryBuilder.applySetting("hibernate.c3p0.maxPoolSize", "100");  <===
+
+      StandardServiceRegistry registry = registryBuilder.build(); 
+      try { 
+        MetadataSources metadataSources = new MetadataSources(registry); 
+
+        sessionFactory = metadataSources.buildMetadata().buildSessionFactory(); 
+      } catch (Exception e) {
+        e.printStackTrace();
+        StandardServiceRegistryBuilder.destroy(registry); 
+      } 
+    } 
+    return sessionFactory; 
+  } 
+
+  public static void shutdown() { 
+    if (sessionFactory != null) {
+      sessionFactory.close();
+    }  
+  }
+  
+}

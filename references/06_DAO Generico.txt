@@ -1,0 +1,181 @@
+
+====================================================================================================
+Hibernate - DAO Genérico
+====================================================================================================
+
+DAO Genérico
+----------------------------------------------------------------------------------------------------
+
+import java.util.List;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import com.ctseducare.hibernate.HibernateUtils;
+
+public abstract class DAO<T> {
+
+  private Class<T> persistedClass;
+
+  public DAO(Class<T> persistedClass) {
+    this.persistedClass = persistedClass;
+  }
+
+  public T insert(T entity) throws Exception {
+    Session session = HibernateUtils.getSessionFactory().openSession();
+    Transaction transaction = null;
+    try {
+      transaction = session.beginTransaction();
+
+      session.save(entity);
+      session.flush();
+
+      transaction.commit();
+
+      return entity;
+    } catch (Exception e) {
+      if (transaction != null) {
+        transaction.rollback();
+      }
+      throw new Exception(e);
+    } finally {
+      session.close();
+    }
+  }
+
+  public List<T> listALL() throws Exception {
+    Session session = HibernateUtils.getSessionFactory().openSession();
+    List<T> entities = null;
+    try {
+      CriteriaBuilder cb = session.getCriteriaBuilder();
+      CriteriaQuery<T> query = cb.createQuery(persistedClass);
+      query.from(persistedClass);
+      entities = session.createQuery(query).getResultList();
+      return entities;
+    } catch (Exception e) {
+      throw new Exception(e);
+    } finally {
+      session.close();
+    }
+  }
+
+  public T findById(int id) throws Exception {
+    Session session = HibernateUtils.getSessionFactory().openSession();
+    T entity = null;
+    try {
+      entity = session.find(persistedClass, id);
+      return entity;
+    } catch (Exception e) {
+      throw new Exception(e);
+    } finally {
+      session.close();
+    }
+  }
+
+  public T update(T entity) throws Exception {
+    Session session = HibernateUtils.getSessionFactory().openSession();
+    Transaction transaction = null;
+    try {
+      transaction = session.beginTransaction();
+
+      session.update(entity);
+      session.flush();
+
+      transaction.commit();
+
+      return entity;
+    } catch (Exception e) {
+      if (transaction != null) {
+        transaction.rollback();
+      }
+      throw new Exception(e);
+    } finally {
+      session.close();
+    }
+  }
+
+  public void remove(int id) throws Exception {
+    Session session = HibernateUtils.getSessionFactory().openSession();
+    Transaction transaction = null;
+    try {
+      transaction = session.beginTransaction();
+
+      T entity = session.find(persistedClass, id);
+
+      session.remove(entity);
+      session.flush();
+
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction != null) {
+        transaction.rollback();
+      }
+      throw new Exception(e);
+    } finally {
+      session.close();
+    }
+  }
+
+  public void remove(T entity) throws Exception {
+    Session session = HibernateUtils.getSessionFactory().openSession();
+    Transaction transaction = null;
+    try {
+      transaction = session.beginTransaction();
+
+      session.remove(entity);
+      session.flush();
+
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction != null) {
+        transaction.rollback();
+      }
+      throw new Exception(e);
+    } finally {
+      session.close();
+    }
+  }
+
+}
+
+
+DAO Aluno
+----------------------------------------------------------------------------------------------------
+
+import com.ctseducare.model.Aluno;
+
+public class AlunoDAO extends DAO<Aluno> {
+
+  protected AlunoDAO() {
+    super(Aluno.class);
+  }
+  
+  //TODO Implementar métodos específicos para a classe/tabela Autor
+  
+}
+
+
+Testando o DAO Genérico
+----------------------------------------------------------------------------------------------------
+
+import com.ctseducare.model.Aluno;
+
+public class AlunoDAOTest {
+
+  public static void main(String[] args) {
+    AlunoDAO alunoDAO = new AlunoDAO();
+    
+    Aluno aluno = new Aluno();
+    aluno.setNome("Beltrano Gonçalves");
+    aluno.setEmail("beltrano@yahoo.com.br");
+    
+    try {
+      alunoDAO.insert(aluno);
+      System.out.println("Dados inseridos com sucesso!");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+  }
+
+}

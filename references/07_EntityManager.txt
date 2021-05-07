@@ -1,0 +1,21 @@
+
+====================================================================================================
+Hibernate - EntityManager
+====================================================================================================
+
+Descrição
+----------------------------------------------------------------------------------------------------
+...
+
+
+Hibernate para JPA
+----------------------------------------------------------------------------------------------------
+Passos para converter um projeto Hibernate para JPA/EntityManager
+
+- Substituir o arquivo 'hibernate.properties' pelo arquivo 'persistence.xml'
+
+  OBS: O arquivo 'persistence.xml' deve estar no folder 'resources/META-INF'
+
+- Substituir a classe 'HibernateUtils.java' pela classe 'JPAUtils.java'
+
+- Substituir o 'DAO' atual pelo 'DAO' do folder 'entitymanager'

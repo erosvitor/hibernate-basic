@@ -1,0 +1,88 @@
+
+====================================================================================================
+Hibernate - Mapeamento
+====================================================================================================
+
+Introdução
+----------------------------------------------------------------------------------------------------
+O mapeamento objeto-relacional consiste na definição de classes contendo a mesma estrutura das 
+tabelas no banco de dados. Ter a mesma estrutura significa que a classe deverá ter atributos 
+correspondentes aos campos da tabela que esta sendo mapeada. Para cada tabela no banco de dados, terá
+uma classe.
+
+Para demonstrar como fazer o mapeamento, tomaremos como base uma tabela chamada 'alunos' contendo os
+seguintes campos:
+
+  codigo (tipo inteiro)
+  nome (tipo varchar, tamanho 60)
+  telefone (tipo varchar, tamanho 15)
+
+
+Mapeando uma tabela
+----------------------------------------------------------------------------------------------------
+Para mapear a tabela 'alunos' deverá ser criada uma classe chamada Aluno com a seguinte estrutura:
+
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "alunos")
+public class Aluno implements java.io.Serializable {
+
+  private static final long serialVersionUID = 1L;
+
+  private int codigo;
+  private String nome;
+  private String email;
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "codigo", unique = true, nullable = false)
+  public int getCodigo() {
+    return codigo;
+  }
+
+  public void setCodigo(int codigo) {
+    this.codigo = codigo;
+  }
+
+  @Column(name = "nome", nullable = false, length = 60)
+  public String getNome() {
+  return nome;
+  }
+
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  @Column(name = "email", nullable = false, length = 60)
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+}
+
+
+Obs.: Diferente do nome da tabela, o nome da classe ficou no singular porque uma classe sempre 
+armazenará os dados de um único aluno. Na tabela é armazenado os dados de vários alunos.
+
+
+Reconhecendo o mapeamento
+----------------------------------------------------------------------------------------------------
+Para que o Hibernate possa reconhecer o mapeamento, é necessário adicionar a linha abaixo na classe
+HibernateUtils
+
+  ...
+  MetadataSources metadataSources = new MetadataSources(registry);
+  metadataSources.addAnnotatedClass(Aluno.class);
+  ...
+

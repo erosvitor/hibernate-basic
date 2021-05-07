@@ -1,0 +1,96 @@
+
+====================================================================================================
+Hibernate - DAO
+====================================================================================================
+
+Introdução
+----------------------------------------------------------------------------------------------------
+O DAO (Data Access Object) é um padrão de objeto que define uma classe onde serão armazenados todos
+os métodos para manipulação de dados.
+
+
+Implementando DAO
+----------------------------------------------------------------------------------------------------
+
+import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import com.ctseducare.hibernate.HibernateUtils;
+import com.ctseducare.model.Aluno;
+
+public class AlunoDAO {
+  
+  public void inserir(Aluno aluno) throws Exception {
+    Session session = HibernateUtils.getSessionFactory().openSession();
+    Transaction transaction = null;
+    try {
+      transaction = session.beginTransaction();
+
+      session.save(aluno);
+      session.flush();
+
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction != null) {
+        transaction.rollback();
+      }
+      throw new Exception(e);
+    } finally {
+      session.close();
+    }
+  }
+  
+  public List<Aluno> listar() throws Exception {
+    List<Aluno> alunos = null;
+    Session session = HibernateUtils.getSessionFactory().openSession();
+    try {
+      alunos = session.createQuery("FROM Aluno").list();
+    } catch (Exception e) {
+      throw new Exception(e);
+    } finally {
+      session.close();
+    }
+    return alunos;
+  }
+  
+  public void alterar(Aluno aluno) throws Exception {
+    Session session = HibernateUtils.getSessionFactory().openSession();
+    Transaction transaction = null;
+    try {
+      transaction = session.beginTransaction();
+
+      session.update(aluno);
+      session.flush();
+
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction != null) {
+        transaction.rollback();
+      }
+      throw new Exception(e);
+    } finally {
+      session.close();
+    }
+  }
+  
+  public void excluir(Aluno aluno) throws Exception {
+    Session session = HibernateUtils.getSessionFactory().openSession();
+    Transaction transaction = null;
+    try {
+      transaction = session.beginTransaction();
+
+      session.delete(aluno);
+      session.flush();
+
+      transaction.commit();
+    } catch (Exception e) {
+      if (transaction != null) {
+        transaction.rollback();
+      }
+      throw new Exception(e);
+    } finally {
+      session.close();
+    }
+  }
+
+}
