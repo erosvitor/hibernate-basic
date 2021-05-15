@@ -7,10 +7,9 @@ The **HibernateBasic** is a project shows how use fundamentals of Hibernate ORM.
 The project uses the following technologies:
 
 * Java 11
-* Apache Maven 3.6.3
-* MySQL Database 5.7.33
-* MySQL Connector 8.0.23
-* Hibernate ORM 5.4.29
+* Apache Maven
+* MySQL Server
+* Hibernate ORM
 * IDE Eclipse
 
 ## Database
