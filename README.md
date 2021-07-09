@@ -1,7 +1,7 @@
 # HibernateBasic
 
 ## Description
-The **HibernateBasic** is a project shows how use fundamentals of Hibernate ORM.
+Project that show how use fundamentals of Hibernate ORM.
 
 ## Technologies
 The project uses the following technologies:
