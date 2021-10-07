@@ -1,18 +1,28 @@
-# HibernateBasic
-
-## Description
-Project that show how use fundamentals of Hibernate ORM.
+## About
+The project shows how use fundamentals of Hibernate ORM.
 
 ## Technologies
-The project uses the following technologies:
+The following tools were used in this project:
 
-* Java 11
-* Apache Maven
-* MySQL Server
-* Hibernate ORM
-* IDE Eclipse
+* [Java Oracle](https://www.oracle.com/java/)
+* [Apache Maven](https://maven.apache.org/)
+* [MySQL Server](https://www.mysql.com/)
+* [Hibernate ORM](https://hibernate.org/orm/)
+* [IDE Eclipse](https://www.eclipse.org/)
 
-## Database
+## Requirements
+Before starting this project you need to have Git, JDK Oracle, Maven, MySQL Server and Eclipse IDE installed.
+
+## Starting the project
+
+### Clonning the project
+```
+$ git clone https://github.com/erosvitor/hibernate-basic.git
+
+$ cd hibernate-basic
+```
+
+### Creating the database
 A demo database must be created by using the following command:
 
 ```
@@ -48,9 +58,11 @@ INSERT INTO students (id, name, date_birth) VALUES (13, 'Katrina Munhoz', '1985-
 INSERT INTO students (id, name, date_birth) VALUES (14, 'Vaz Castro', '1982-11-02');
 INSERT INTO students (id, name, date_birth) VALUES (15, 'Suli Mascarenhas', '1985-04-20');
 ```
+### Testing the project
+**Step 1:** Start the application using Eclipse IDE
 
-## Queries
-The project contains queries writing in three flavors: *Native SQL*, *HQL* and *Criteria*.
+## License
+This project is under license from MIT. For more details, see the LICENSE file.
 
 ## Release History
 
